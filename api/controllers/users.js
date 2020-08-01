@@ -21,38 +21,41 @@ exports.signup_user = (req, res, next) => {
                            
                         });
                     } else {
-                        const user = new User({
-                            _id: new mongoose.Types.ObjectId(),
-                            username: req.body.username,
-                            firstname: req.body.firstname,
-                            lastname: req.body.lastname,
-                            password: hash
-                        });
-                        user
-                            .save()
-                            .then(result => {
-                                console.log(result);
-                                res.status(201).json({
-                                    message: "User Created"
-                                })
-                            })
-                            .catch(err => {
-                                console.log(err);
-                                res.status(500).json({
-                                    error: err
+                                const user = new User({
+                                    _id: new mongoose.Types.ObjectId(),
+                                    username: req.body.username,
+                                    firstname: req.body.firstname,
+                                    lastname: req.body.lastname,
+                                    password: hash
                                 });
-                            });
-                    }
-                });
+                                user
+                                    .save()
+                                    .then(result => {
+                                        console.log(result);
+                                        res.status(201).json({
+                                            message: "User Created"
+                                        })
+                                    })
+                                    .catch(err => {
+                                        console.log(err);
+                                        res.status(500).json({
+                                            error: err
+                                        });
+                                    });
+                                }
+                        
+                            })
+
+                        }
+                        
+                    })
+                    .catch(err => {
+                        console.log(err);
+                        res.status(500).json({
+                            error: err
+                        });
+                    });
             }
-        })
-        .catch(err => {
-            console.log(err);
-            res.status(500).json({
-                error: err
-            });
-        });
-}
 exports.user_login = (req, res, next) => {
     User.find({ username: req.body.username })
         .exec()
@@ -71,12 +74,24 @@ exports.user_login = (req, res, next) => {
                     });
                 }
                 if (result) {
-                    const token=jwt.sign({uname},'MY_SECRET_KEY',{expiresIn:'1d'});
-                    res.status(200).json({
-                        message: 'Auth Successful',
-                        token: token
-                    });
-                } else {
+                    bcrypt.hash(req.body.username, 10, (err, hash)=>{
+                        if (err) {
+                            console.log(err);
+                            return res.json({
+                                error: err 
+                            });
+                        } 
+                        else{
+                            const token=jwt.sign({uname},'MY_SECRET_KEY',{expiresIn:'1d'});
+                            res.status(200).json({
+                                message: 'Auth Successful',
+                                cid:hash,
+                                token: token 
+                            });
+                    }
+                }
+                        )}
+                     else {
                     res.status(401).json({
                         message: 'Auth Failed'
                     });
