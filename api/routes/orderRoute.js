@@ -10,4 +10,5 @@ router.post("/placeorder",checkAuth, orderController.place_order);
 router.put("/updateorder",checkAuth, orderController.update_order);
 router.get("/viewDate",orderController.view_orders_date);
 router.get("/viewCustomer/:cid",orderController.view_orders_customer);
+router.get("/viewCustomers",orderController.view_all_customer_orders);
 module.exports = router;

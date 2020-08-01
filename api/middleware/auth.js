@@ -1,6 +1,6 @@
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
-var userName;
+
 module.exports = (req, res, next) => {
   try {
     const token = req.headers.authorization.split(' ')[0];
@@ -31,11 +31,3 @@ catch (error) {
   });
 }
 };
-
-
-
-
-function sendUser() {
-  return userName;
-}
-

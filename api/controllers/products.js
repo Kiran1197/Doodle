@@ -8,7 +8,6 @@ exports.create_product = (req, res, next) => {
     category: req.body.category,
     price: req.body.price,
   });
-  //Product.updateMany()
   Product.find({ productName: req.body.productName })
   .exec()
   .then((result)=>{
@@ -85,11 +84,6 @@ exports.create_product = (req, res, next) => {
       });
     });
   }
-
-function getDetails()
-{
-
-}
 
 
 
